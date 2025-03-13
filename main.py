@@ -1,18 +1,44 @@
-words = []
+from flask import Flask, request, send_file
+import os
 
-fileName = "words.txt"  # Replace this dynamically with the uploaded file's name
+app = Flask(__name__)
+UPLOAD_FOLDER = "uploads"
+PROCESSED_FOLDER = "processed"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(PROCESSED_FOLDER, exist_ok=True)
 
-with open(fileName, "r") as file:
-    for line in file:
-        words.extend(word.strip() for word in line.split(","))  # Strip spaces from each word
+@app.route("/upload", methods=["POST"])
+def upload_file():
+    if "file" not in request.files:
+        return "No file part", 400
 
-words.sort()
+    file = request.files["file"]
+    if file.filename == "":
+        return "No selected file", 400
 
-# Create the new file name
-sortedFileName = f"{fileName.rsplit('.', 1)[0]}_sorted.txt"
+    # Save uploaded file
+    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+    file.save(file_path)
 
-# Write sorted words to the new file in a single line, separated by commas
-with open(sortedFileName, "w") as sortedFile:
-    sortedFile.write(", ".join(words))  # Ensure a space after each comma for readability
+    # Process the file
+    sorted_file_path = process_file(file_path)
 
-print(f"Sorted words saved to {sortedFileName}")
+    # Send the processed file back
+    return send_file(sorted_file_path, as_attachment=True)
+
+def process_file(file_path):
+    with open(file_path, "r") as file:
+        words = [word.strip() for line in file for word in line.split(",")]
+
+    words.sort()
+
+    sorted_filename = os.path.splitext(os.path.basename(file_path))[0] + "_sorted.txt"
+    sorted_file_path = os.path.join(PROCESSED_FOLDER, sorted_filename)
+
+    with open(sorted_file_path, "w") as file:
+        file.write(", ".join(words))
+
+    return sorted_file_path
+
+if __name__ == "__main__":
+    app.run(debug=True)
