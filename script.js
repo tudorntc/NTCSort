@@ -14,8 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
             downloadButton.disabled = false;
             image.src = "assets/images/uploaded.svg";
             text.textContent = "File uploaded.";
-            text.style.color = "rgb(93, 187, 0)";
-            fileCont.style.border = "2px dashed #5dbb00";
+            text.style.color = "#216869";
+            fileCont.style.border = "2px dashed #216869";
         } else {
             downloadButton.disabled = true;
         }
