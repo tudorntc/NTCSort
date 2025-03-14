@@ -7,7 +7,7 @@
 
 body{
     height: 100vh;
-    background-color: #f4f4f4;
+    background-color: #fff;
 }
 
 .container{
@@ -15,7 +15,7 @@ body{
     width: 60%;
     position: relative;
     display: flex;
-    background-color: #fff;
+    background-color: #f7f7f7;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
