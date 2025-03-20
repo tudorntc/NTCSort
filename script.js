@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const formData = new FormData();
         formData.append("file", uploadedFile);
 
-        fetch("https://ntcsort.onrender.com/upload", {
+        fetch("https://ntcsort.onrender.com/download", {
             method: "POST",
             body: formData
         })
